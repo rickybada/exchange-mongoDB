@@ -1,0 +1,41 @@
+<h1><strong>Home</strong></h1>
+<h2>Hi, {{ user.username }}</h2>
+<a href="{% url 'order_json' %}">Order report JSON</a>
+<a href="{% url 'buy_sell' %}">BUY / SELL</a>
+
+<ul>
+    <li><strong>USD Balance:</strong> {{ profile.usd_balance }}</li>
+    <li><strong>BTC Balance:</strong> {{ profile.btc_balance }}</li>
+    <li><strong>BTC Price:</strong> {{ profile.btc_price }}</li>
+    <li><strong>Profit / Loss:</strong> {{ profile.profit_loss }}</li>
+</ul>
+
+<p>Orders</p>
+<table border="1">
+    <thead>
+        <tr>
+            <th>USER</th>
+            <th>TYPE</th>
+            <th>QTY</th>
+            <th>PRICE</th>
+            <th>DATE</th>
+            <th>STATUS</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ order.get_type_display }}</td>
+                <td>{{ order.btc_quantity }}</td>
+                <td>{{ order.btc_price }}</td>
+                <td>{{ order.datetime }}</td>
+                <td>{{ order.get_status_display }}</td>
+                <td>
+                    <a href="{% url 'detail_view' order.id %}">Details</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

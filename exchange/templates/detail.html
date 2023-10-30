@@ -1,0 +1,17 @@
+<h1><strong>Details</strong></h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <h1>Order {{ order.profile.user.username }}</h1>
+
+<ul>
+    <li><strong>Type:</strong> {{ order.get_type_display }}</li>
+    <li><strong>Status:</strong> {{ order.get_status_display }}</li>
+    <li><strong>BTC Quantity:</strong> {{ order.btc_quantity }}</li>
+    <li><strong>Order Price:</strong> {{ order.order_price }}</li>
+    <li><strong>Purchase Price:</strong> {{ order.order_price }}</li>
+    <li><strong>Buyer:</strong> {{ order.profile.user.username }}</li>
+    <li><strong>Datetime:</strong> {{ order.datetime }}</li>
+</ul>
+
+</form>

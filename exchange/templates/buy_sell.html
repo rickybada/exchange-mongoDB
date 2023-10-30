@@ -1,0 +1,6 @@
+<h1><strong>Create Order</strong></h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Invia</button>
+</form>
