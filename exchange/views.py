@@ -33,7 +33,8 @@ def buy_sell_view(request):
         if form.is_valid():
             # Esegui le azioni necessarie per salvare l'ordine
             order = form.save(commit=False)  # Crea un'istanza dell'ordine ma non la salva ancora nel database
-            order.profile = request.user.profile  # Assegna il profilo dell'utente all'ordine
+            user_profile = request.user.profile  # Ottieni il profilo associato all'utente corrente
+            order.profile = user_profile  # Assegna il profilo all'ordine
             order.save()  # Salva ora l'ordine nel database
     
     return render(request, 'buy_sell.html', {'form': form})  
@@ -50,15 +51,20 @@ def registration_view(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            
+            # Creazione del profilo associato all'utente
+            profile = Profile(user=user)
+            profile.save()
+            
             login(request, user)
-            return redirect('login.html')
+            return redirect('login')
     else:
         form = RegistrationForm()
         
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'registration.html', {'form': form})
 
 
-def login_view(request, form):
+def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -67,7 +73,7 @@ def login_view(request, form):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('home.html')
             else:
                 # Autenticazione fallita
                 form.add_error(None, 'Username o password non corretti')
@@ -75,13 +81,14 @@ def login_view(request, form):
     else:
         form = LoginForm()
     
-    return render(request, 'login.html', {'form': form})            
+    return render(request, 'login.html', {'form': form})
+         
 
 
 def logout_view(request):
     logout(request)
     print('Hai effettuato il logout')
-    return render('login')
+    return render(request, 'logout.html')
 
 
 @login_required
@@ -104,7 +111,7 @@ def order_json_view(request):
             order_dict["Profit / Loss"] = order.profile.profit_loss  # Assumendo che profit_loss sia un campo nel modello Profile
         else:
             order_dict["Seller"] = str(order.profile.user)
-            order_dict["Purchase Price"] = order.average_weighted
+            order_dict["Purchase Price"] = order.profile.average_weighted
 
         orders_json.append(order_dict)
 

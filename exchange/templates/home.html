@@ -1,7 +1,12 @@
 <h1><strong>Home</strong></h1>
 <h2>Hi, {{ user.username }}</h2>
 <a href="{% url 'order_json' %}">Order report JSON</a>
-<a href="{% url 'buy_sell' %}">BUY / SELL</a>
+<a href="{% url 'buy_sell' %}">Buy / Sell</a>
+{% if user.is_authenticated %}
+<a href="{% url 'logout' %}">Logout</a>
+{% else %}
+<a href="{% url 'login' %}">Login</a>
+{% endif %}
 
 <ul>
     <li><strong>USD Balance:</strong> {{ profile.usd_balance }}</li>

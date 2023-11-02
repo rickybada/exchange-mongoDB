@@ -5,14 +5,14 @@ import random
 
 class Profile(models.Model):
     _id = ObjectIdField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     ips = models.Field(default=[])
     subprofiles = models.Field(default={})
     usd_balance = models.FloatField(default=0)
     btc_balance = models.FloatField(default=0)
     
     def save(self, *args, **kwargs):
-        if not self.id:  # Se il profilo è nuovo e non ha ancora un ID
+        if not self._id:  # Se il profilo è nuovo e non ha ancora un ID
             self.btc_balance = random.uniform(1, 10) # Assegna un saldo BTC casuale tra 1 e 10
             self.usd_balance = random.uniform(1000, 10000) # Assegna un saldo USD casuale tra 1000 e 10000
         super(Profile, self).save(*args, **kwargs)  # Chiama il metodo save() originale
@@ -42,6 +42,7 @@ class Order(models.Model):
         ('buy', 'Buy'),
         ('sell', 'Sell'),
     ]
+    _id = ObjectIdField()
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     datetime = models.DateTimeField(auto_now_add=True)
     order_price = models.FloatField() # prezzo dell'ordine

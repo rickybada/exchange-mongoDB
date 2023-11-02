@@ -30,4 +30,4 @@ class RegistrationForm(UserCreationForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['type', 'btc_quantity', 'btc_price']
+        fields = ['type', 'btc_quantity', 'order_price']
